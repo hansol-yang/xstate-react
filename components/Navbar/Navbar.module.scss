@@ -1,0 +1,25 @@
+@import '../../styles/variables';
+@import '../../styles/colors';
+
+.Navbar {
+    padding: 1rem;
+    box-shadow: $box-shadow;
+    background-color: $primary;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Navbar__title {
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.Navbar__nav {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
