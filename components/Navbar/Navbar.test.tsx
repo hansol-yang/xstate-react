@@ -1,25 +1,41 @@
+import { useRouter } from 'next/router';
 import { Navbar } from './';
 
-import { fireEvent, render } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import { fireEvent, render } from '@testing-library/react';
 
-const useRouter = jest.mock('next/router', () => {
+jest.mock('next/router');
+
+let pathname = '/';
+const mockedUseRouter = useRouter as jest.Mock;
+mockedUseRouter.mockImplementation(() => {
     return {
-        push: jest.fn()
+        pathname,
+        push: jest.fn().mockImplementation((uri: string) => {
+            pathname = uri;
+            return Promise.resolve(true);
+        }),
     };
-})
+});
 
 describe('Navbar', () => {
-    test('renders login anchor', () => {
-        const { getByRole } = render(<Navbar />);
+    // Todo change spy function
 
-        expect(getByRole('link')).toHaveTextContent('Login');
+    const loggedIn = false;
+
+    test('invoke router.push, if not logged in', () => {
+        const { getByRole } = render(<Navbar />);
+        if (loggedIn) return;
+        fireEvent.click(getByRole('button'));
+        expect(useRouter().pathname).toBe('/auth/login');
     });
 
-    test('route to "/auth/login", if click login anchor', () => {
-        const { container, getByText } = render(<Navbar />);
+    test('invoke logout, if logged in', () => {
+        const { getByRole } = render(<Navbar />);
+        const mockLogout = jest.fn();
 
-        
-        fireEvent.click(getByText('Login'));
+        if (!loggedIn) return;
+        fireEvent.click(getByRole('button'));
+        expect(mockLogout).toHaveBeenCalledTimes(1);
     });
 });

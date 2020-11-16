@@ -1,18 +1,26 @@
-import { useRouter } from 'next/dist/client/router';
-import Link from 'next/link';
+import { IconButton } from '../Button';
+
+import styles from './Navbar.module.scss';
+
+import { ReactComponent as IcoLogin } from '../../public/icons/login-24px.svg';
+import { useRouter } from 'next/router';
 
 export function Navbar() {
     const router = useRouter();
-    const _onClickLogin = (e: React.MouseEvent) => {
-        e.preventDefault();
-        router.push('/auth/login')
-    }
+    const _onClickAuthButton = () => {
+        router.push('/auth/login');
+    };
+
     return (
-        <nav>
-            {/* <Link href='/auth/login'>
-                <a>Login</a>
-            </Link> */}
-            <a href="#" onClick={_onClickLogin}>Login</a>
-        </nav>
+        <header className={styles.Navbar}>
+            <span className={styles.Navbar__title}>To do</span>
+            <nav className={styles.Navbar__nav}>
+                <IconButton
+                    Icon={IcoLogin}
+                    iconColor='#fff'
+                    onClick={_onClickAuthButton}
+                />
+            </nav>
+        </header>
     );
 }
